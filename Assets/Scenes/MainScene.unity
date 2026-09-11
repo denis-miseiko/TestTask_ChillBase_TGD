@@ -383844,6 +383844,7 @@ MonoBehaviour:
   closeDistance: 3
   car: {fileID: 642287924359762687}
   carController: {fileID: 643933034}
+  speedUI: {fileID: 417657145}
   enterExitKey: 101
 --- !u!4 &8594672701603759358
 Transform:
