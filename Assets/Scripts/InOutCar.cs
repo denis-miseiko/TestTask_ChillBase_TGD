@@ -19,6 +19,9 @@ public class InOutCar : MonoBehaviour
     [SerializeField] GameObject car = null;
     [SerializeField] PrometeoCarController carController = null;
 
+    [Space, Header("UI")]
+    [SerializeField] GameObject speedUI = null;
+
     [Space, Header("Input")]
     [SerializeField] KeyCode enterExitKey = KeyCode.E;
 
@@ -28,6 +31,7 @@ public class InOutCar : MonoBehaviour
     void Start()
     {
         carController.enabled = false;
+        speedUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -45,8 +49,11 @@ public class InOutCar : MonoBehaviour
     void GetOutOfCar()
     {
         inCar = false;
-
+        speedUI.SetActive(false);
+        
         carController.enabled = false;
+        carController.ThrottleOff();
+        carController.Brakes();
 
         player.transform.position = car.transform.position + car.transform.TransformDirection(Vector3.left);
         SimulateWPress();
@@ -58,6 +65,7 @@ public class InOutCar : MonoBehaviour
     void GetIntoCar()
     {
         inCar = true;
+        speedUI.SetActive(true);
 
         carController.enabled = true;
 
