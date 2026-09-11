@@ -130,6 +130,7 @@ public class PrometeoCarController : MonoBehaviour
       public bool isDrifting; // Used to know whether the car is drifting or not.
       [HideInInspector]
       public bool isTractionLocked; // Used to know whether the traction of the car is locked or not.
+      GameObject car = null;
 
     //PRIVATE VARIABLES
 
@@ -144,12 +145,17 @@ public class PrometeoCarController : MonoBehaviour
       float localVelocityX;
       bool deceleratingCar;
       bool touchControlsSetup = false;
-      /*
-      The following variables are used to store information about sideways friction of the wheels (such as
-      extremumSlip,extremumValue, asymptoteSlip, asymptoteValue and stiffness). We change this values to
-      make the car to start drifting.
-      */
-      WheelFrictionCurve FLwheelFriction;
+      float carRotation;
+      float time;
+      float targetTime = 5f;
+      KeyCode evacuationCheck = KeyCode.R;
+
+    /*
+    The following variables are used to store information about sideways friction of the wheels (such as
+    extremumSlip,extremumValue, asymptoteSlip, asymptoteValue and stiffness). We change this values to
+    make the car to start drifting.
+    */
+    WheelFrictionCurve FLwheelFriction;
       float FLWextremumSlip;
       WheelFrictionCurve FRwheelFriction;
       float FRWextremumSlip;
@@ -362,6 +368,12 @@ public class PrometeoCarController : MonoBehaviour
         if(!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && steeringAxis != 0f){
           ResetSteeringAngle();
         }
+
+            AutoFlip();
+            if(Input.GetKeyDown(evacuationCheck))
+            {
+                CarEvacuationCheck();
+            }
 
       }
 
@@ -690,6 +702,12 @@ public class PrometeoCarController : MonoBehaviour
 
     }
 
+    bool IsCarGrounded()
+    {
+        if (frontLeftCollider.isGrounded && frontRightCollider.isGrounded && rearLeftCollider.isGrounded && rearRightCollider.isGrounded) return true;
+        return false;
+    }
+
     // This function is used to emit both the particle systems of the tires' smoke and the trail renderers of the tire skids
     // depending on the value of the bool variables 'isDrifting' and 'isTractionLocked'.
     public void DriftCarPS(){
@@ -708,7 +726,7 @@ public class PrometeoCarController : MonoBehaviour
         }
 
         try{
-          if((isTractionLocked || Mathf.Abs(localVelocityX) > 5f) && Mathf.Abs(carSpeed) > 12f){
+                if ((isTractionLocked || Mathf.Abs(localVelocityX) > 5f) && Mathf.Abs(carSpeed) > 12f && IsCarGrounded()){
             RLWTireSkid.emitting = true;
             RRWTireSkid.emitting = true;
           }else {
@@ -778,4 +796,34 @@ public class PrometeoCarController : MonoBehaviour
       }
     }
 
+    void AutoFlip()
+    {
+        car = this.gameObject;
+        float carRotation = Vector3.Dot(transform.up, Vector3.up);
+
+        if (carRotation < 0.5f && carRigidbody.linearVelocity.magnitude < 1.5f)
+        {
+            time += Time.deltaTime;
+
+            if (time >= targetTime)
+            {
+                float currentYaw = transform.eulerAngles.y;
+                float currentX = transform.position.x;
+                float currentZ = transform.position.z;
+                car.transform.position = new Vector3(currentX, 0.5f, currentZ);
+                car.transform.rotation = Quaternion.Euler(0f, currentYaw, 0f);
+                time = 0;
+            }
+        }
+        else return;
+    }
+
+    void CarEvacuationCheck()
+    {
+        float currentYaw = transform.eulerAngles.y;
+        float currentX = transform.position.x;
+        float currentZ = transform.position.z;
+        car.transform.position = new Vector3(currentX, 2f, currentZ);
+        car.transform.rotation = Quaternion.Euler(0f, currentYaw, 180f);
+    }
 }
