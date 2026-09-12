@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(WaypointManager))]
+[CustomEditor(typeof(WaypointData))]
 public class WaypointDataEditor : Editor
 {
     private SerializedProperty displayNameProp;
