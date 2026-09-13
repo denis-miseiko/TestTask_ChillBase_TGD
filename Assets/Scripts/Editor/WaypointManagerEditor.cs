@@ -9,6 +9,9 @@ public class WaypointManagerEditor : Editor
     private SerializedProperty pointerPrefabProp;
     private SerializedProperty playerProp;
     private SerializedProperty carProp;
+    private SerializedProperty waypointIconPrefabProp;
+    private SerializedProperty playerIconPrefabProp;
+    private SerializedProperty minimapCameraProp;
 
     private GUIStyle duplicateNameStyle;
     private GUIStyle duplicateSummaryStyle;
@@ -18,6 +21,9 @@ public class WaypointManagerEditor : Editor
         pointerPrefabProp = serializedObject.FindProperty("pointerPrefab");
         playerProp = serializedObject.FindProperty("player");
         carProp = serializedObject.FindProperty("car");
+        waypointIconPrefabProp = serializedObject.FindProperty("waypointIconPrefab");
+        playerIconPrefabProp = serializedObject.FindProperty("playerIconPrefab");
+        minimapCameraProp = serializedObject.FindProperty("minimapCamera");
     }
 
     public override void OnInspectorGUI()
@@ -27,6 +33,9 @@ public class WaypointManagerEditor : Editor
         EditorGUILayout.PropertyField(playerProp);
         EditorGUILayout.PropertyField(carProp);
         EditorGUILayout.PropertyField(pointerPrefabProp);
+        EditorGUILayout.PropertyField(waypointIconPrefabProp);
+        EditorGUILayout.PropertyField(playerIconPrefabProp);
+        EditorGUILayout.PropertyField(minimapCameraProp);
 
         serializedObject.ApplyModifiedProperties();
 

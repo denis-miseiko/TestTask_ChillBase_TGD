@@ -1,7 +1,5 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
-using UnityEditor.Build;
 using UnityEngine;
 
 public class WaypointManager : MonoBehaviour
@@ -19,6 +17,14 @@ public class WaypointManager : MonoBehaviour
 
     [Header("Car")]
     [SerializeField] private Transform car;
+
+    [Header("Minimap")]
+    [SerializeField] private GameObject waypointIconPrefab;
+    [SerializeField] private GameObject playerIconPrefab;
+    [SerializeField] private Camera minimapCamera;
+
+    private GameObject currentWaypointIcon;
+    private GameObject playerIcon;
 
     private Transform activeTarget = null;
 
@@ -48,6 +54,7 @@ public class WaypointManager : MonoBehaviour
 
     private void Start()
     {
+        SpawnPlayerIcon();
         ActivateNextWaypoint();
     }
 
@@ -67,16 +74,31 @@ public class WaypointManager : MonoBehaviour
     {
         get
         {
-            if (myInCar == null)
-            {
-                activeTarget = player;
-            }
-            else
-            {
-                activeTarget = myInCar.InCar ? car : player;
-            }
-            return activeTarget;
+            if (myInCar == null) return player;
+            return myInCar.InCar ? car : player;
         }
+    }
+
+    public bool IsPlayerInCar
+    {
+        get
+        {
+            if (myInCar == null) return false;
+            return myInCar.InCar;
+        }
+    }
+
+    private void SpawnPlayerIcon()
+    {
+        if (playerIconPrefab == null || player == null) return;
+
+        playerIcon = Instantiate(playerIconPrefab);
+
+        var comp = playerIcon.GetComponent<PlayerMinimapIcon>();
+        if (comp == null) return;
+
+        comp.SetPlayer(player);
+        comp.SetWaypointManager(this);
     }
 
     private void ActivateNextWaypoint()
@@ -91,6 +113,7 @@ public class WaypointManager : MonoBehaviour
         }
 
         CurrentWaypoint = waypoints[currentIndex];
+        SpawnWaypointIcon(CurrentWaypoint);
 
         if (pointerPrefab != null)
         {
@@ -103,6 +126,23 @@ public class WaypointManager : MonoBehaviour
         }
     }
 
+    private void SpawnWaypointIcon(WaypointData wp)
+    {
+        if (waypointIconPrefab == null || wp == null) return;
+
+        if (currentWaypointIcon != null)
+            Destroy(currentWaypointIcon);
+
+        currentWaypointIcon = Instantiate(waypointIconPrefab);
+
+        var icon = currentWaypointIcon.GetComponent<MinimapIcon>();
+        if (icon == null) return;
+
+        icon.SetTarget(wp.transform);
+        icon.SetCamera(minimapCamera);
+        icon.SetWaypointManager(this);
+    }
+
     private void ReachCurrentWaypoint()
     {
         CurrentWaypoint.isCompleted = true;
@@ -111,11 +151,14 @@ public class WaypointManager : MonoBehaviour
         if (currentPointerInstance != null)
             Destroy(currentPointerInstance);
 
+        if (currentWaypointIcon != null)
+            Destroy(currentWaypointIcon);
+
         ActivateNextWaypoint();
     }
 
     // =====================================================================
-    //  Управление списком точек
+    //  РЈРїСЂР°РІР»РµРЅРёРµ СЃРїРёСЃРєРѕРј С‚РѕС‡РµРє
     // =====================================================================
 
     public void RenumberWaypoints()
@@ -141,7 +184,7 @@ public class WaypointManager : MonoBehaviour
         RenumberWaypoints();
     }
 
-    // Добавляет пустой слот в конец списка
+    // Р”РѕР±Р°РІР»СЏРµС‚ РїСѓСЃС‚РѕР№ СЃР»РѕС‚ РІ РєРѕРЅРµС† СЃРїРёСЃРєР°
     public void AddEmptySlot()
     {
         waypoints.Add(null);
@@ -166,7 +209,7 @@ public class WaypointManager : MonoBehaviour
 
         waypoints.RemoveAt(index);
 
-        // Сбрасываем ID у удалённой точки
+        // РЎР±СЂР°СЃС‹РІР°РµРј ID Сѓ СѓРґР°Р»С‘РЅРЅРѕР№ С‚РѕС‡РєРё
         if (removed != null)
             removed.SetOrderIndex(0);
 
@@ -187,7 +230,7 @@ public class WaypointManager : MonoBehaviour
 
 
     // =====================================================================
-    //  Поиск и активация по имени
+    //  РџРѕРёСЃРє Рё Р°РєС‚РёРІР°С†РёСЏ РїРѕ РёРјРµРЅРё
     // =====================================================================
 
     public WaypointData FindByName(string name)
@@ -209,7 +252,7 @@ public class WaypointManager : MonoBehaviour
 
         if (idx < 0)
         {
-            Debug.LogWarning($"[Nav] Точка с именем \"{name}\" не найдена.");
+            Debug.LogWarning($"[Nav] РўРѕС‡РєР° СЃ РёРјРµРЅРµРј \"{name}\" РЅРµ РЅР°Р№РґРµРЅР°.");
             return false;
         }
 
@@ -227,7 +270,7 @@ public class WaypointManager : MonoBehaviour
         for (int i = 0; i < waypoints.Count; i++)
         {
             var wp = waypoints[i];
-            list.Add(wp == null ? $"{i + 1}. <пусто>" : $"{wp.OrderIndex}. {wp.Label}");
+            list.Add(wp == null ? $"{i + 1}. <РїСѓСЃС‚Рѕ>" : $"{wp.OrderIndex}. {wp.Label}");
         }
         return list;
     }
@@ -236,7 +279,7 @@ public class WaypointManager : MonoBehaviour
         int removed = 0;
         for (int i = waypoints.Count - 1; i >= 0; i--)
         {
-            // Ссылка мертва: либо null, либо уничтоженный UnityEngine.Object
+            // РЎСЃС‹Р»РєР° РјРµСЂС‚РІР°: Р»РёР±Рѕ null, Р»РёР±Рѕ СѓРЅРёС‡С‚РѕР¶РµРЅРЅС‹Р№ UnityEngine.Object
             if (waypoints[i] == null)
             {
                 waypoints.RemoveAt(i);
