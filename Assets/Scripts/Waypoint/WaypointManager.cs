@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using UnityEditor.Build;
 using UnityEngine;
 
@@ -52,16 +53,7 @@ public class WaypointManager : MonoBehaviour
 
     private void Update()
     {
-        if (myInCar == null)
-        {
-            activeTarget = player;
-        }
-        else
-        {
-            activeTarget = myInCar.InCar ? car : player;
-        }
-
-        if (activeTarget == null) return;
+        activeTarget = ActiveTarget;
 
         if (CurrentWaypoint == null) return;
 
@@ -70,6 +62,21 @@ public class WaypointManager : MonoBehaviour
 
         if (Vector3.Distance(a, b) <= CurrentWaypoint.triggerRadius)
             ReachCurrentWaypoint();
+    }
+    public Transform ActiveTarget
+    {
+        get
+        {
+            if (myInCar == null)
+            {
+                activeTarget = player;
+            }
+            else
+            {
+                activeTarget = myInCar.InCar ? car : player;
+            }
+            return activeTarget;
+        }
     }
 
     private void ActivateNextWaypoint()
