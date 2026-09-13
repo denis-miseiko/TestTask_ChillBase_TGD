@@ -25,7 +25,8 @@ public class InOutCar : MonoBehaviour
     [Space, Header("Input")]
     [SerializeField] KeyCode enterExitKey = KeyCode.E;
 
-    bool inCar = false;
+    [HideInInspector] private bool inCar = false;
+    [HideInInspector] public bool InCar => inCar;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
