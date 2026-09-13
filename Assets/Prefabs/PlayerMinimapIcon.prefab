@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMinimapIcon
   waypointManager: {fileID: 0}
   fallbackTarget: {fileID: 0}
-  height: 50
+  height: 95
   rotationOffset: -90
   iconRenderer: {fileID: 0}
   pedestrianMaterial: {fileID: 0}
