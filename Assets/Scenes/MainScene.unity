@@ -71810,8 +71810,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Waypoint
   displayName: Pier
-  orderIndex: 2
-  triggerRadius: 1
+  orderIndex: 3
+  triggerRadius: 2
   isCompleted: 0
 --- !u!4 &408413412
 Transform:
@@ -73292,6 +73292,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1030999596, guid: abc00000000006069429442868931278, type: 3}
   m_PrefabInstance: {fileID: 413417176}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &413446064
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 413446065}
+  - component: {fileID: 413446066}
+  m_Layer: 0
+  m_Name: 0_car
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &413446065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413446064}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.5, y: 1, z: -85}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 582290525}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &413446066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413446064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e80abcd025913d24c9875ef03f7a8db3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaypointData
+  displayName: 
+  orderIndex: 1
+  triggerRadius: 1
+  isCompleted: 0
 --- !u!1001 &413508206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -76727,8 +76775,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Waypoint
   displayName: Railway
-  orderIndex: 1
-  triggerRadius: 1
+  orderIndex: 2
+  triggerRadius: 2
   isCompleted: 0
 --- !u!1 &438177443
 GameObject:
@@ -104015,6 +104063,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 413446065}
   - {fileID: 438057612}
   - {fileID: 408413412}
   m_Father: {fileID: 1369685368}
@@ -231715,6 +231764,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavigationManager
   waypoints:
+  - {fileID: 413446066}
   - {fileID: 438057613}
   - {fileID: 408413411}
   pointerPrefab: {fileID: 894410318}
@@ -370865,8 +370915,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 642287924359762687}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.097371, y: -0.0000003726193, z: 0.70993245}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -13.5, y: 0, z: -85}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -370876,7 +370926,7 @@ Transform:
   - {fileID: 1830090741}
   - {fileID: 1554048835}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!23 &265004275020933558
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -371990,8 +372040,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1766987459640519547}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -999.4727, y: 1.445, z: -937.3298}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -998.4727, y: 1.375, z: -1046.3298}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -372492,7 +372542,7 @@ GameObject:
   - component: {fileID: 8565634168627653264}
   - component: {fileID: 8565634168627653265}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: CarInteractionManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -373516,8 +373566,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4140194346956077228}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.07000005, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 0, z: -109}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -387734,7 +387784,6 @@ MonoBehaviour:
   player: {fileID: 4140194346956077228}
   closeDistance: 3
   car: {fileID: 642287924359762687}
-  effects: {fileID: 918495314}
   carController: {fileID: 643933034}
   speedUI: {fileID: 417657145}
   enterExitKey: 101
@@ -387920,8 +387969,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8653759870073782702}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -999.4727, y: 1.445, z: -937.3298}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -998.4727, y: 1.375, z: -1046.3298}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
