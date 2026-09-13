@@ -17,6 +17,7 @@ public class InOutCar : MonoBehaviour
 
     [Space, Header("Car")]
     [SerializeField] GameObject car = null;
+    [SerializeField] GameObject effects = null;
     [SerializeField] PrometeoCarController carController = null;
 
     [Space, Header("UI")]
@@ -32,6 +33,7 @@ public class InOutCar : MonoBehaviour
     void Start()
     {
         carController.enabled = false;
+        carController.useSounds = false;
         speedUI.SetActive(false);
     }
 
@@ -55,6 +57,10 @@ public class InOutCar : MonoBehaviour
         carController.enabled = false;
         carController.ThrottleOff();
         carController.Brakes();
+        effects.SetActive(false);
+        carController.useSounds = false;
+        carController.RLWParticleSystem.Stop();
+        carController.RRWParticleSystem.Stop();
 
         player.transform.position = car.transform.position + car.transform.TransformDirection(Vector3.left);
         SimulateWPress();
@@ -69,6 +75,9 @@ public class InOutCar : MonoBehaviour
         speedUI.SetActive(true);
 
         carController.enabled = true;
+        carController.useSounds = true;
+        carController.carEngineSound.Play();
+        effects.SetActive(true);
 
         myCamera.Follow = carCameraPoint.transform;
         player.SetActive(false);
