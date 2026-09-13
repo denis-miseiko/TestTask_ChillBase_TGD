@@ -17,7 +17,6 @@ public class InOutCar : MonoBehaviour
 
     [Space, Header("Car")]
     [SerializeField] GameObject car = null;
-    [SerializeField] GameObject effects = null;
     [SerializeField] PrometeoCarController carController = null;
 
     [Space, Header("UI")]
@@ -33,7 +32,7 @@ public class InOutCar : MonoBehaviour
     void Start()
     {
         carController.enabled = false;
-        carController.useSounds = false;
+        carController.carEngineSound.Stop();
         speedUI.SetActive(false);
     }
 
@@ -52,18 +51,24 @@ public class InOutCar : MonoBehaviour
     void GetOutOfCar()
     {
         inCar = false;
-        speedUI.SetActive(false);
-        
-        carController.enabled = false;
-        carController.ThrottleOff();
-        carController.Brakes();
-        effects.SetActive(false);
-        carController.useSounds = false;
+
         carController.RLWParticleSystem.Stop();
         carController.RRWParticleSystem.Stop();
+        carController.RLWTireSkid.emitting = false;
+        carController.RRWTireSkid.emitting = false;
+        carController.isTractionLocked = false;
+        carController.isDrifting = false;
+        carController.carEngineSound.Stop();
+        carController.ThrottleOff();
+        carController.Brakes();
+        speedUI.SetActive(false);
+
+        carController.enabled = false;
 
         player.transform.position = car.transform.position + car.transform.TransformDirection(Vector3.left);
+
         SimulateWPress();
+
         player.SetActive(true);
 
         myCamera.Follow = playerCameraPoint.transform;
@@ -72,14 +77,13 @@ public class InOutCar : MonoBehaviour
     void GetIntoCar()
     {
         inCar = true;
-        speedUI.SetActive(true);
 
         carController.enabled = true;
-        carController.useSounds = true;
         carController.carEngineSound.Play();
-        effects.SetActive(true);
+        speedUI.SetActive(true);
 
         myCamera.Follow = carCameraPoint.transform;
+
         player.SetActive(false);
     }
 

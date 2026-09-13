@@ -130,5 +130,5 @@ MonoBehaviour:
   minimapCamera: {fileID: 0}
   waypointManager: {fileID: 0}
   height: 95
-  edgeFactor: 0.9
+  edgeFactor: 0.85
   stayOnTargetWhenClose: 1
